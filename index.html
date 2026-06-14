@@ -13,81 +13,35 @@
 <title>Rozliczenia</title>
 <style>
 :root {
-  --navy: #1a2a4a;
-  --navy-light: #243660;
-  --navy-dark: #111d33;
-  --beige: #f5ebd2;
-  --beige-dark: #e8d8b0;
-  --beige-text: #c9b98a;
-  --white: #ffffff;
-  --text: #1a2a4a;
-  --text-muted: #6b7a99;
-  --border: #e2d9c5;
-  --success: #2d7a4f;
-  --success-bg: #eaf6ef;
-  --danger: #b83232;
-  --danger-bg: #fdeaea;
-  --warning: #8a6200;
-  --warning-bg: #fdf3dc;
-  --radius: 10px;
-  --radius-lg: 16px;
-  --shadow: 0 2px 12px rgba(26,42,74,0.08);
+  --navy: #1a2a4a; --navy-light: #243660; --navy-dark: #111d33;
+  --beige: #f5ebd2; --beige-dark: #e8d8b0; --beige-text: #c9b98a;
+  --white: #ffffff; --text: #1a2a4a; --text-muted: #6b7a99; --border: #e2d9c5;
+  --success: #2d7a4f; --success-bg: #eaf6ef;
+  --danger: #b83232; --danger-bg: #fdeaea;
+  --warning: #8a6200; --warning-bg: #fdf3dc;
+  --radius: 10px; --radius-lg: 16px; --shadow: 0 2px 12px rgba(26,42,74,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-  background: var(--beige);
-  color: var(--text);
-  min-height: 100dvh;
-  -webkit-font-smoothing: antialiased;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--beige); color: var(--text); min-height: 100dvh; -webkit-font-smoothing: antialiased; }
 
-.topnav {
-  background: var(--navy);
-  color: var(--beige);
-  padding: env(safe-area-inset-top, 0) 0 0;
-  position: sticky; top: 0; z-index: 50;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-}
-.topnav-inner {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 14px 16px 12px; text-align: center; gap: 4px;
-}
+.topnav { background: var(--navy); color: var(--beige); padding: env(safe-area-inset-top,0) 0 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+.topnav-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 16px 12px; text-align: center; gap: 4px; }
 .topnav-logo { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .topnav-logo svg { width: 26px; height: 26px; }
 .topnav-name { font-size: 17px; font-weight: 600; color: var(--beige); letter-spacing: 0.01em; }
 .topnav-sub { font-size: 11px; color: var(--beige-text); letter-spacing: 0.04em; text-transform: uppercase; }
 
-.sync-bar {
-  background: var(--navy-dark);
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px; padding: 5px 16px;
-  font-size: 11px; color: var(--beige-text);
-  border-top: 1px solid rgba(255,255,255,0.05);
-  min-height: 26px;
-}
-.sync-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--beige-text); flex-shrink: 0;
-  transition: background 0.3s;
-}
-.sync-dot.ok { background: #7dcfa0; }
-.sync-dot.err { background: #f08080; }
-.sync-dot.syncing { background: #fac775; animation: pulse 1s infinite; }
+.sync-bar { background: var(--navy-dark); display: flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 16px; font-size: 11px; color: var(--beige-text); border-top: 1px solid rgba(255,255,255,0.05); min-height: 26px; }
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--beige-text); flex-shrink: 0; transition: background 0.3s; }
+.sync-dot.ok { background: #7dcfa0; } .sync-dot.err { background: #f08080; } .sync-dot.syncing { background: #fac775; animation: pulse 1s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-.stats-bar {
-  background: var(--navy-dark);
-  display: grid; grid-template-columns: repeat(4,1fr);
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
+.stats-bar { background: var(--navy-dark); display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid rgba(255,255,255,0.06); }
 .stat { padding: 10px 8px; text-align: center; border-right: 1px solid rgba(255,255,255,0.06); }
 .stat:last-child { border-right: none; }
 .stat-label { font-size: 10px; color: var(--beige-text); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 2px; }
 .stat-val { font-size: 13px; font-weight: 600; color: var(--beige); }
-.stat-val.danger { color: #f08080; }
-.stat-val.success { color: #7dcfa0; }
+.stat-val.danger { color: #f08080; } .stat-val.success { color: #7dcfa0; }
 
 .search-bar { background: var(--navy); padding: 0 14px 12px; border-top: 1px solid rgba(255,255,255,0.06); }
 .search-wrap { display: flex; align-items: center; background: rgba(255,255,255,0.1); border-radius: var(--radius); padding: 0 10px; gap: 8px; }
@@ -103,8 +57,13 @@ body {
 
 .main { padding: 0 16px 16px; padding-bottom: calc(80px + env(safe-area-inset-bottom,0)); border-top: 1px solid var(--border); background: var(--white); border-radius: 0 var(--radius-lg) 0 0; }
 #main-content { padding-top: 14px; }
-
 .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 10px; }
+
+/* CATEGORY FILTER */
+.cat-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.cat-chip { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--text-muted); transition: all 0.12s; white-space: nowrap; }
+.cat-chip.active { background: var(--navy); color: var(--beige); border-color: var(--navy); }
+.cat-chip:active { transform: scale(0.96); }
 
 .matter-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: box-shadow 0.15s, transform 0.1s; box-shadow: var(--shadow); }
 .matter-card:active { transform: scale(0.985); }
@@ -116,8 +75,7 @@ body {
 .amount-item { flex: 1; }
 .amount-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
 .amount-val { font-size: 14px; font-weight: 600; }
-.amount-val.danger { color: var(--danger); }
-.amount-val.success { color: var(--success); }
+.amount-val.danger { color: var(--danger); } .amount-val.success { color: var(--success); }
 .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--navy-light), var(--navy)); border-radius: 2px; transition: width 0.4s; }
 
@@ -127,6 +85,16 @@ body {
 .badge.overdue { background: var(--danger-bg); color: var(--danger); }
 .badge.none { background: var(--beige); color: var(--text-muted); }
 .badge.archived { background: #ececec; color: #888; }
+
+/* CATEGORY BADGES */
+.cat-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; margin-top: 5px; }
+.cat-gospodarcze { background: #e8f0fe; color: #1a56b0; }
+.cat-rodzinne { background: #fce8f3; color: #9c1f6e; }
+.cat-karne { background: #fdeaea; color: #b83232; }
+.cat-cywilne { background: #eaf6ef; color: #2d7a4f; }
+.cat-pracownicze { background: #fdf3dc; color: #8a6200; }
+.cat-administracyjne { background: #ede8fe; color: #5b3fa6; }
+.cat-inne { background: var(--beige); color: var(--text-muted); }
 
 .note-hint { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--warning); margin-top: 6px; }
 
@@ -143,8 +111,8 @@ body {
 
 .field { margin-bottom: 14px; }
 .field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
-.field input, .field textarea { width: 100%; font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--white); color: var(--text); outline: none; font-family: inherit; transition: border-color 0.15s; }
-.field input:focus, .field textarea:focus { border-color: var(--navy); }
+.field input, .field textarea, .field select { width: 100%; font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--white); color: var(--text); outline: none; font-family: inherit; transition: border-color 0.15s; }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--navy); }
 .field textarea { resize: vertical; min-height: 70px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -187,13 +155,37 @@ body {
 .empty-icon { font-size: 48px; margin-bottom: 12px; }
 .empty h2 { font-size: 17px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
 .empty p { font-size: 14px; line-height: 1.6; }
-
 .sub-section { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 16px 0 8px; }
 .hl { background: #fff3b0; border-radius: 2px; }
-
 .loading { text-align: center; padding: 48px 24px; color: var(--text-muted); font-size: 14px; }
 .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* RAPORT */
+.report-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.month-nav { display: flex; align-items: center; gap: 10px; }
+.month-nav button { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--white); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.month-nav button:active { background: var(--beige); }
+.month-label { font-size: 15px; font-weight: 600; min-width: 130px; text-align: center; }
+.report-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.report-stat { background: var(--beige); border-radius: var(--radius); padding: 12px 14px; }
+.report-stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+.report-stat-val { font-size: 18px; font-weight: 700; }
+.report-stat-val.success { color: var(--success); }
+.report-stat-val.danger { color: var(--danger); }
+.chart-wrap { margin-bottom: 18px; }
+.chart-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+.chart-bar-label { width: 90px; color: var(--text-muted); text-align: right; flex-shrink: 0; font-size: 11px; }
+.chart-bar-track { flex: 1; height: 20px; background: var(--beige); border-radius: 4px; overflow: hidden; }
+.chart-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--navy-light), var(--navy)); transition: width 0.4s; }
+.chart-bar-fill.secondary { background: linear-gradient(90deg, #5dcaa5, #1d9e75); }
+.chart-bar-val { width: 70px; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.report-payments { margin-top: 4px; }
+.report-pay-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.report-pay-row:last-child { border-bottom: none; }
+.report-pay-client { font-weight: 600; }
+.report-pay-matter { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.report-pay-amount { font-weight: 600; color: var(--success); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -239,6 +231,7 @@ body {
 <div class="tabs" id="tabs-bar">
   <button class="tab active" id="tab-active" onclick="setTab('active')">Aktywne <span class="tab-count" id="cnt-active">0</span></button>
   <button class="tab" id="tab-archived" onclick="setTab('archived')">Archiwum <span class="tab-count" id="cnt-archived">0</span></button>
+  <button class="tab" id="tab-report" onclick="setTab('report')">📊 Raport</button>
 </div>
 
 <main class="main" role="main">
@@ -247,7 +240,7 @@ body {
   </div>
 </main>
 
-<button class="fab" onclick="openNew()" aria-label="Dodaj nową sprawę">+</button>
+<button class="fab" id="fab" onclick="openNew()" aria-label="Dodaj nową sprawę">+</button>
 
 <div id="modal-bg" class="modal-bg" style="display:none" role="dialog" aria-modal="true">
   <div class="modal" id="modal-panel">
@@ -260,7 +253,6 @@ body {
   </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -278,79 +270,62 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const colRef = collection(db, 'sprawy');
 
+const CATEGORIES = ['gospodarcze','rodzinne','karne','cywilne','pracownicze','administracyjne','inne'];
+const CAT_LABELS = { gospodarcze:'Gospodarcze', rodzinne:'Rodzinne', karne:'Karne', cywilne:'Cywilne', pracownicze:'Pracownicze', administracyjne:'Administracyjne', inne:'Inne' };
+
 let data = [];
 let currentTab = 'active';
 let searchQuery = '';
+let filterCat = '';
+let reportMonth = new Date();
+reportMonth.setDate(1);
 
 function setSyncStatus(state, text) {
-  const dot = document.getElementById('sync-dot');
-  const label = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + state;
-  label.textContent = text;
+  document.getElementById('sync-dot').className = 'sync-dot ' + state;
+  document.getElementById('sync-label').textContent = text;
 }
 
-// Real-time listener — updates on ALL devices instantly
 onSnapshot(colRef, (snapshot) => {
   data = snapshot.docs.map(d => ({ _id: d.id, ...d.data() }));
   data.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
   setSyncStatus('ok', 'Zsynchronizowano');
   render();
-}, (err) => {
-  setSyncStatus('err', 'Błąd połączenia — tryb offline');
-  console.error(err);
-});
+}, () => setSyncStatus('err', 'Błąd połączenia'));
 
 function fmt(n) { return Number(n).toLocaleString('pl-PL',{minimumFractionDigits:0,maximumFractionDigits:0})+' zł'; }
 function fmtShort(n) { const v=Number(n); if(v>=1000) return (v/1000).toLocaleString('pl-PL',{maximumFractionDigits:1})+'k'; return v.toLocaleString('pl-PL'); }
-function fmtDate(s) { if(!s) return '—'; const d=new Date(s); return d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+function fmtDate(s) { if(!s) return '—'; return new Date(s).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit',year:'numeric'}); }
 function paid(m) { return (m.payments||[]).reduce((a,p)=>a+Number(p.amount),0); }
 function remaining(m) { return Number(m.total)-paid(m); }
 function nextDue(m) {
   const p=paid(m); let c=0;
-  const rates=[...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date));
-  for(const r of rates){ c+=Number(r.amount); if(c>p) return r.date; }
+  for(const r of [...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date))){ c+=Number(r.amount); if(c>p) return r.date; }
   return null;
 }
 function status(m) {
   if(m.archived) return 'archived';
-  const rem=remaining(m);
-  if(rem<=0) return 'ok';
-  const nd=nextDue(m);
-  if(nd && new Date(nd)<new Date()) return 'overdue';
+  const rem=remaining(m); if(rem<=0) return 'ok';
+  const nd=nextDue(m); if(nd&&new Date(nd)<new Date()) return 'overdue';
   if(paid(m)>0) return 'partial';
   return 'none';
 }
 const statusLabel={ok:'Zapłacono',partial:'Częściowo',overdue:'Zaległe',none:'Oczekuje',archived:'Archiwum'};
-
-function highlight(text, query) {
-  if(!query) return esc(text);
-  const q = query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-  return esc(text).replace(new RegExp('('+q+')','gi'),'<mark class="hl">$1</mark>');
+function highlight(text, q) {
+  if(!q) return esc(text);
+  return esc(text).replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="hl">$1</mark>');
 }
-function matchesSearch(m,q) {
-  if(!q) return true;
-  const l=q.toLowerCase();
-  return (m.client||'').toLowerCase().includes(l)||(m.matter||'').toLowerCase().includes(l);
-}
+function matchesSearch(m,q) { if(!q) return true; const l=q.toLowerCase(); return (m.client||'').toLowerCase().includes(l)||(m.matter||'').toLowerCase().includes(l); }
 function esc(s) { const d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
 
 window.setTab = function(tab) {
   currentTab=tab;
-  document.getElementById('tab-active').classList.toggle('active',tab==='active');
-  document.getElementById('tab-archived').classList.toggle('active',tab==='archived');
-  renderList();
+  ['active','archived','report'].forEach(t=>document.getElementById('tab-'+t)?.classList.toggle('active',t===tab));
+  document.getElementById('fab').style.display = tab==='report'?'none':'flex';
+  render();
 };
-window.onSearch = function(val) {
-  searchQuery=val.trim();
-  document.getElementById('search-clear').style.display=val?'block':'none';
-  renderList();
-};
-window.clearSearch = function() {
-  searchQuery='';
-  document.getElementById('search-input').value='';
-  document.getElementById('search-clear').style.display='none';
-  renderList();
-};
+window.onSearch = function(val) { searchQuery=val.trim(); document.getElementById('search-clear').style.display=val?'block':'none'; renderList(); };
+window.clearSearch = function() { searchQuery=''; document.getElementById('search-input').value=''; document.getElementById('search-clear').style.display='none'; renderList(); };
+window.setFilterCat = function(cat) { filterCat=filterCat===cat?'':cat; renderList(); };
 
 function render() {
   const active=data.filter(m=>!m.archived);
@@ -363,7 +338,8 @@ function render() {
   document.getElementById('st-rem').textContent=active.length?fmtShort(totalAll-paidAll)+' zł':'—';
   document.getElementById('cnt-active').textContent=active.length;
   document.getElementById('cnt-archived').textContent=archived.length;
-  renderList();
+  if(currentTab==='report') renderReport();
+  else renderList();
 }
 
 function renderList() {
@@ -371,27 +347,37 @@ function renderList() {
   const isArchived=currentTab==='archived';
   const filtered=data
     .map((m,i)=>({m,i}))
-    .filter(({m})=>!!m.archived===isArchived && matchesSearch(m,searchQuery));
+    .filter(({m})=>!!m.archived===isArchived && matchesSearch(m,searchQuery) && (!filterCat||(m.category||'inne')===filterCat));
 
-  if(!filtered.length) {
+  // category filter chips
+  const usedCats=[...new Set(data.filter(m=>!!m.archived===isArchived).map(m=>m.category||'inne'))];
+  let chipsHtml='';
+  if(usedCats.length>1){
+    chipsHtml=`<div class="cat-filter">
+      ${usedCats.map(c=>`<button class="cat-chip${filterCat===c?' active':''}" onclick="setFilterCat('${c}')">${CAT_LABELS[c]||c}</button>`).join('')}
+    </div>`;
+  }
+
+  if(!filtered.length){
     let msg=isArchived?'Brak zarchiwizowanych spraw.':'Brak aktywnych spraw.';
-    if(searchQuery) msg=`Brak wyników dla „${esc(searchQuery)}".`;
-    el.innerHTML=`<div class="empty"><div class="empty-icon">${isArchived?'📦':'⚖️'}</div><h2>${msg}</h2>${!searchQuery&&!isArchived?'<p>Kliknij przycisk + aby dodać pierwszą sprawę.</p>':''}</div>`;
+    if(searchQuery||filterCat) msg='Brak wyników dla podanych filtrów.';
+    el.innerHTML=chipsHtml+`<div class="empty"><div class="empty-icon">${isArchived?'📦':'⚖️'}</div><h2>${msg}</h2>${!searchQuery&&!filterCat&&!isArchived?'<p>Kliknij przycisk + aby dodać pierwszą sprawę.</p>':''}</div>`;
     return;
   }
 
-  let html='';
-  if(searchQuery) html+=`<div class="section-title" style="margin-bottom:10px">Wyniki dla „${esc(searchQuery)}" — ${filtered.length}</div>`;
-  for(const {m,i} of filtered) {
+  let html=chipsHtml;
+  if(searchQuery) html+=`<div class="section-title" style="margin-bottom:10px">Wyniki — ${filtered.length}</div>`;
+  for(const {m,i} of filtered){
     const p=paid(m),rem=remaining(m),s=status(m);
     const pct=Math.min(100,Math.round((p/Number(m.total))*100));
-    const nd=nextDue(m);
-    const isOverdue=nd&&new Date(nd)<new Date();
+    const nd=nextDue(m); const isOverdue=nd&&new Date(nd)<new Date();
+    const cat=m.category||'inne';
     html+=`<div class="matter-card${m.archived?' archived':''}" onclick="openDetail('${m._id}')" role="button" tabindex="0">
       <div class="matter-card-top">
         <div>
           <div class="matter-client">${highlight(m.client,searchQuery)}</div>
           <div class="matter-desc">${highlight(m.matter,searchQuery)}</div>
+          <span class="cat-badge cat-${cat}">${CAT_LABELS[cat]||cat}</span>
         </div>
         <span class="badge ${s}">${statusLabel[s]}</span>
       </div>
@@ -408,6 +394,96 @@ function renderList() {
   el.innerHTML=html;
 }
 
+/* ---- RAPORT ---- */
+function renderReport() {
+  const el=document.getElementById('main-content');
+  const y=reportMonth.getFullYear(), mo=reportMonth.getMonth();
+  const monthName=reportMonth.toLocaleDateString('pl-PL',{month:'long',year:'numeric'});
+
+  // payments in this month
+  const monthPayments=[];
+  for(const m of data){
+    for(const p of (m.payments||[])){
+      const d=new Date(p.date);
+      if(d.getFullYear()===y && d.getMonth()===mo){
+        monthPayments.push({...p, client:m.client, matter:m.matter, category:m.category||'inne'});
+      }
+    }
+  }
+  monthPayments.sort((a,b)=>b.date.localeCompare(a.date));
+  const monthTotal=monthPayments.reduce((s,p)=>s+Number(p.amount),0);
+
+  // last 6 months bars
+  const bars=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(y,mo-i,1);
+    const by=d.getFullYear(), bm=d.getMonth();
+    let sum=0;
+    for(const m of data)
+      for(const p of (m.payments||[])){ const pd=new Date(p.date); if(pd.getFullYear()===by&&pd.getMonth()===bm) sum+=Number(p.amount); }
+    bars.push({label:d.toLocaleDateString('pl-PL',{month:'short',year:'2-digit'}), val:sum});
+  }
+  const maxBar=Math.max(...bars.map(b=>b.val),1);
+
+  // by category
+  const byCat={};
+  for(const p of monthPayments){ byCat[p.category]=(byCat[p.category]||0)+Number(p.amount); }
+  const catRows=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const maxCat=Math.max(...catRows.map(c=>c[1]),1);
+
+  // outstanding
+  const outstanding=data.filter(m=>!m.archived).reduce((s,m)=>s+Math.max(0,remaining(m)),0);
+
+  const barsHtml=bars.map(b=>`
+    <div class="chart-bar-row">
+      <div class="chart-bar-label">${b.label}</div>
+      <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${Math.round((b.val/maxBar)*100)}%"></div></div>
+      <div class="chart-bar-val">${b.val>0?fmtShort(b.val)+' zł':'—'}</div>
+    </div>`).join('');
+
+  const catHtml=catRows.length?catRows.map(([cat,val])=>`
+    <div class="chart-bar-row">
+      <div class="chart-bar-label">${CAT_LABELS[cat]||cat}</div>
+      <div class="chart-bar-track"><div class="chart-bar-fill secondary" style="width:${Math.round((val/maxCat)*100)}%"></div></div>
+      <div class="chart-bar-val">${fmtShort(val)} zł</div>
+    </div>`).join(''):'<div style="font-size:13px;color:var(--text-muted)">Brak wpłat w tym miesiącu.</div>';
+
+  const paysHtml=monthPayments.length?monthPayments.map(p=>`
+    <div class="report-pay-row">
+      <div><div class="report-pay-client">${esc(p.client)}</div><div class="report-pay-matter">${esc(p.matter)}</div></div>
+      <div style="text-align:right">
+        <div class="report-pay-amount">${fmt(p.amount)}</div>
+        <div style="font-size:10px;color:var(--text-muted)">${fmtDate(p.date)}</div>
+      </div>
+    </div>`)
+    .join(''):'<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Brak wpłat w tym miesiącu.</div>';
+
+  el.innerHTML=`
+    <div class="report-header">
+      <div class="month-nav">
+        <button onclick="shiftMonth(-1)">‹</button>
+        <div class="month-label">${monthName}</div>
+        <button onclick="shiftMonth(1)">›</button>
+      </div>
+    </div>
+    <div class="report-stats">
+      <div class="report-stat"><div class="report-stat-label">Wpłynęło w tym miesiącu</div><div class="report-stat-val success">${fmt(monthTotal)}</div></div>
+      <div class="report-stat"><div class="report-stat-label">Do ściągnięcia (wszystkie)</div><div class="report-stat-val danger">${fmt(outstanding)}</div></div>
+    </div>
+    <div class="sub-section">Ostatnie 6 miesięcy</div>
+    <div class="chart-wrap">${barsHtml}</div>
+    <div class="sub-section">Wpłaty wg kategorii</div>
+    <div class="chart-wrap">${catHtml}</div>
+    <div class="sub-section">Wpłaty w tym miesiącu</div>
+    <div class="report-payments">${paysHtml}</div>
+  `;
+}
+
+window.shiftMonth = function(dir) {
+  reportMonth.setMonth(reportMonth.getMonth()+dir);
+  renderReport();
+};
+
 function openModal(title,bodyHtml) {
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-body').innerHTML=bodyHtml;
@@ -416,21 +492,21 @@ function openModal(title,bodyHtml) {
 window.closeModal = function() { document.getElementById('modal-bg').style.display='none'; };
 document.getElementById('modal-bg').addEventListener('click',e=>{ if(e.target.id==='modal-bg') window.closeModal(); });
 
-/* ---- FORM ---- */
 let _editId=null, _formRates=[];
 
 window.openNew = function() {
   _editId=null; _formRates=[{date:'',amount:''}];
-  renderForm({client:'',matter:'',total:'',note:''});
+  renderForm({client:'',matter:'',total:'',note:'',category:'inne'});
 };
 
 window.renderForm = function(m) {
-  let rateHtml=_formRates.map((r,i)=>`
+  const catOptions=CATEGORIES.map(c=>`<option value="${c}" ${(m.category||'inne')===c?'selected':''}>${CAT_LABELS[c]}</option>`).join('');
+  const rateHtml=_formRates.map((r,i)=>`
     <div class="rate-row">
-      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;display:block;margin-bottom:4px">Termin</label>
+      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px">Termin</label>
         <input type="date" value="${r.date}" onchange="_formRates[${i}].date=this.value">
       </div>
-      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;display:block;margin-bottom:4px">Kwota (zł)</label>
+      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px">Kwota (zł)</label>
         <input type="number" placeholder="0" value="${r.amount}" onchange="_formRates[${i}].amount=this.value">
       </div>
       <button class="del-btn" onclick="_formRates.splice(${i},1);renderForm(collectForm())" aria-label="Usuń ratę">✕</button>
@@ -441,6 +517,10 @@ window.renderForm = function(m) {
     <div class="row2">
       <div class="field"><label>Klient</label><input id="f-client" value="${esc(m.client)}" placeholder="Imię / firma"></div>
       <div class="field"><label>Kwota (zł)</label><input id="f-total" type="number" value="${m.total||''}" placeholder="0"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Kategoria</label><select id="f-cat">${catOptions}</select></div>
+      <div class="field" style="align-self:end"></div>
     </div>
     <div class="field"><label>Opis sprawy</label><input id="f-matter" value="${esc(m.matter)}" placeholder="Krótki opis"></div>
     <div class="rate-section-title">
@@ -461,7 +541,8 @@ window.collectForm = function() {
     client:(document.getElementById('f-client')||{}).value||'',
     matter:(document.getElementById('f-matter')||{}).value||'',
     total:(document.getElementById('f-total')||{}).value||'',
-    note:(document.getElementById('f-note')||{}).value||''
+    note:(document.getElementById('f-note')||{}).value||'',
+    category:(document.getElementById('f-cat')||{}).value||'inne'
   };
 };
 
@@ -472,17 +553,15 @@ window.saveMatter = async function() {
   const id=_editId||('m_'+Date.now());
   const existing=_editId?data.find(m=>m._id===_editId):null;
   const obj={
-    client:f.client.trim(), matter:f.matter.trim(),
-    total:parseFloat(f.total), note:f.note.trim(),
+    client:f.client.trim(), matter:f.matter.trim(), total:parseFloat(f.total),
+    note:f.note.trim(), category:f.category,
     rates:_formRates.filter(r=>r.date&&r.amount),
     payments:existing?existing.payments:[],
     archived:existing?existing.archived:false,
     createdAt:existing?existing.createdAt:Date.now()
   };
-  try {
-    await setDoc(doc(db,'sprawy',id),obj);
-    window.closeModal();
-  } catch(e) { setSyncStatus('err','Błąd zapisu'); alert('Błąd zapisu: '+e.message); }
+  try { await setDoc(doc(db,'sprawy',id),obj); window.closeModal(); }
+  catch(e) { setSyncStatus('err','Błąd zapisu'); alert('Błąd: '+e.message); }
 };
 
 window.deleteMatter = async function() {
@@ -492,34 +571,24 @@ window.deleteMatter = async function() {
   catch(e) { setSyncStatus('err','Błąd usunięcia'); }
 };
 
-/* ---- DETAIL ---- */
 window.openDetail = function(id) {
-  const m=data.find(m=>m._id===id);
-  if(!m) return;
+  const m=data.find(m=>m._id===id); if(!m) return;
   const p=paid(m),rem=remaining(m),s=status(m);
   const pct=Math.min(100,Math.round((p/Number(m.total))*100));
   const rates=[...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date));
+  const cat=m.category||'inne';
 
   let rateHtml='',cumul=0;
-  for(const r of rates){
-    cumul+=Number(r.amount);
-    const isPaid=cumul<=p;
-    rateHtml+=`<div class="rate-list-row"><span>${fmtDate(r.date)}</span><span>${fmt(r.amount)}</span><span class="badge ${isPaid?'ok':'none'}">${isPaid?'Opłacona':'Oczekuje'}</span></div>`;
-  }
+  for(const r of rates){ cumul+=Number(r.amount); const ip=cumul<=p; rateHtml+=`<div class="rate-list-row"><span>${fmtDate(r.date)}</span><span>${fmt(r.amount)}</span><span class="badge ${ip?'ok':'none'}">${ip?'Opłacona':'Oczekuje'}</span></div>`; }
 
   let payHtml='';
   const pays=m.payments||[];
   if(!pays.length) payHtml='<div style="font-size:13px;color:var(--text-muted);padding:6px 0">Brak zarejestrowanych wpłat</div>';
-  for(let i=0;i<pays.length;i++){
-    payHtml+=`<div class="payment-row">
-      <div><div class="pay-date">${fmtDate(pays[i].date)}</div></div>
-      <span class="pay-amount">${fmt(pays[i].amount)}</span>
-      <button class="btn small danger" onclick="deletePayment('${id}',${i})">✕</button>
-    </div>`;
-  }
+  for(let i=0;i<pays.length;i++) payHtml+=`<div class="payment-row"><div><div class="pay-date">${fmtDate(pays[i].date)}</div></div><span class="pay-amount">${fmt(pays[i].amount)}</span><button class="btn small danger" onclick="deletePayment('${id}',${i})">✕</button></div>`;
 
   const today=new Date().toISOString().slice(0,10);
   const body=`
+    <div style="margin-bottom:10px"><span class="cat-badge cat-${cat}">${CAT_LABELS[cat]||cat}</span></div>
     <div class="detail-stats">
       <div class="detail-stat"><div class="detail-stat-label">Kwota</div><div class="detail-stat-val">${fmt(m.total)}</div></div>
       <div class="detail-stat"><div class="detail-stat-label">Wpłacono</div><div class="detail-stat-val" style="color:var(--success)">${fmt(p)}</div></div>
@@ -529,15 +598,11 @@ window.openDetail = function(id) {
     ${m.note?`<div class="note-block">📝 ${esc(m.note)}</div>`:''}
     ${rates.length?`<div class="sub-section">Harmonogram rat</div><div>${rateHtml}</div>`:''}
     <div class="sub-section">Wpłaty</div>
-    <div id="pays-list">${payHtml}</div>
+    <div>${payHtml}</div>
     ${!m.archived?`<div class="add-payment-row">
-      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px">Data</label>
-        <input type="date" id="pay-date" value="${today}">
-      </div>
-      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px">Kwota (zł)</label>
-        <input type="number" id="pay-amount" placeholder="0">
-      </div>
-      <button class="add-btn" onclick="addPayment('${id}')" aria-label="Dodaj wpłatę">✓</button>
+      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px">Data</label><input type="date" id="pay-date" value="${today}"></div>
+      <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px">Kwota (zł)</label><input type="number" id="pay-amount" placeholder="0"></div>
+      <button class="add-btn" onclick="addPayment('${id}')">✓</button>
     </div>`:''}
     <div class="btn-row" style="margin-top:20px">
       <button class="btn" onclick="openEdit('${id}')">✏️ Edytuj</button>
@@ -548,21 +613,15 @@ window.openDetail = function(id) {
 };
 
 window.toggleArchive = async function(id) {
-  const m=data.find(m=>m._id===id);
-  if(!m) return;
+  const m=data.find(m=>m._id===id); if(!m) return;
   setSyncStatus('syncing','Zapisywanie…');
-  try {
-    await updateDoc(doc(db,'sprawy',id),{archived:!m.archived});
-    window.closeModal();
-    window.setTab(m.archived?'active':'archived');
-  } catch(e) { setSyncStatus('err','Błąd'); }
+  try { await updateDoc(doc(db,'sprawy',id),{archived:!m.archived}); window.closeModal(); window.setTab(m.archived?'active':'archived'); }
+  catch(e) { setSyncStatus('err','Błąd'); }
 };
 
 window.openEdit = function(id) {
-  const m=data.find(m=>m._id===id);
-  if(!m) return;
-  _editId=id;
-  _formRates=m.rates&&m.rates.length?[...m.rates]:[{date:'',amount:''}];
+  const m=data.find(m=>m._id===id); if(!m) return;
+  _editId=id; _formRates=m.rates&&m.rates.length?[...m.rates]:[{date:'',amount:''}];
   window.renderForm(m);
 };
 
@@ -570,32 +629,22 @@ window.addPayment = async function(id) {
   const date=document.getElementById('pay-date').value;
   const amount=parseFloat(document.getElementById('pay-amount').value)||0;
   if(!date||!amount){alert('Podaj datę i kwotę wpłaty.');return;}
-  const m=data.find(m=>m._id===id);
-  if(!m) return;
+  const m=data.find(m=>m._id===id); if(!m) return;
   setSyncStatus('syncing','Zapisywanie…');
-  const payments=[...(m.payments||[]),{date,amount}];
-  try {
-    await updateDoc(doc(db,'sprawy',id),{payments});
-    window.openDetail(id);
-  } catch(e) { setSyncStatus('err','Błąd zapisu'); }
+  try { await updateDoc(doc(db,'sprawy',id),{payments:[...(m.payments||[]),{date,amount}]}); window.openDetail(id); }
+  catch(e) { setSyncStatus('err','Błąd zapisu'); }
 };
 
 window.deletePayment = async function(id,pidx) {
   if(!confirm('Usunąć tę wpłatę?')) return;
-  const m=data.find(m=>m._id===id);
-  if(!m) return;
+  const m=data.find(m=>m._id===id); if(!m) return;
   setSyncStatus('syncing','Zapisywanie…');
-  const payments=[...(m.payments||[])];
-  payments.splice(pidx,1);
-  try {
-    await updateDoc(doc(db,'sprawy',id),{payments});
-    window.openDetail(id);
-  } catch(e) { setSyncStatus('err','Błąd zapisu'); }
+  const payments=[...(m.payments||[])]; payments.splice(pidx,1);
+  try { await updateDoc(doc(db,'sprawy',id),{payments}); window.openDetail(id); }
+  catch(e) { setSyncStatus('err','Błąd zapisu'); }
 };
 
-if('serviceWorker' in navigator) {
-  window.addEventListener('load',()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
-}
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script>
 </body>
 </html>
