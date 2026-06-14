@@ -33,9 +33,7 @@
   --radius-lg: 16px;
   --shadow: 0 2px 12px rgba(26,42,74,0.08);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   background: var(--beige);
@@ -44,74 +42,73 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* TOP NAV */
 .topnav {
   background: var(--navy);
   color: var(--beige);
   padding: env(safe-area-inset-top, 0) 0 0;
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position: sticky; top: 0; z-index: 50;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 .topnav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px 12px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 14px 16px 12px; text-align: center; gap: 4px;
 }
-.topnav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.topnav-logo { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .topnav-logo svg { width: 26px; height: 26px; }
-.topnav h1 { font-size: 17px; font-weight: 600; color: var(--beige); letter-spacing: 0.01em; }
+.topnav-name { font-size: 17px; font-weight: 600; color: var(--beige); letter-spacing: 0.01em; }
 .topnav-sub { font-size: 11px; color: var(--beige-text); letter-spacing: 0.04em; text-transform: uppercase; }
 
-/* STATS BAR */
+.sync-bar {
+  background: var(--navy-dark);
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 5px 16px;
+  font-size: 11px; color: var(--beige-text);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  min-height: 26px;
+}
+.sync-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--beige-text); flex-shrink: 0;
+  transition: background 0.3s;
+}
+.sync-dot.ok { background: #7dcfa0; }
+.sync-dot.err { background: #f08080; }
+.sync-dot.syncing { background: #fac775; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
 .stats-bar {
   background: var(--navy-dark);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(4,1fr);
   border-top: 1px solid rgba(255,255,255,0.06);
 }
-.stat {
-  padding: 10px 8px;
-  text-align: center;
-  border-right: 1px solid rgba(255,255,255,0.06);
-}
+.stat { padding: 10px 8px; text-align: center; border-right: 1px solid rgba(255,255,255,0.06); }
 .stat:last-child { border-right: none; }
 .stat-label { font-size: 10px; color: var(--beige-text); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 2px; }
 .stat-val { font-size: 13px; font-weight: 600; color: var(--beige); }
 .stat-val.danger { color: #f08080; }
 .stat-val.success { color: #7dcfa0; }
 
-/* MAIN */
-.main { padding: 16px; padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); }
+.search-bar { background: var(--navy); padding: 0 14px 12px; border-top: 1px solid rgba(255,255,255,0.06); }
+.search-wrap { display: flex; align-items: center; background: rgba(255,255,255,0.1); border-radius: var(--radius); padding: 0 10px; gap: 8px; }
+.search-wrap input { background: transparent; border: none; outline: none; color: var(--beige); font-size: 14px; padding: 9px 0; flex: 1; font-family: inherit; }
+.search-wrap input::placeholder { color: var(--beige-text); }
+.search-clear { background: none; border: none; color: var(--beige-text); cursor: pointer; font-size: 16px; padding: 0; line-height: 1; display: none; }
 
-/* SECTION TITLE */
-.section-title {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  margin: 0 0 10px;
-}
+.tabs { display: flex; padding: 14px 16px 0; gap: 6px; }
+.tab { padding: 7px 14px; border-radius: var(--radius) var(--radius) 0 0; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: rgba(26,42,74,0.08); color: var(--text-muted); transition: background 0.15s, color 0.15s; }
+.tab.active { background: var(--white); color: var(--navy); border: 1px solid var(--border); border-bottom: 1px solid var(--white); margin-bottom: -1px; }
+.tab-count { display: inline-block; background: var(--beige-dark); color: var(--text-muted); font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-left: 4px; font-weight: 600; }
+.tab.active .tab-count { background: var(--beige); }
 
-/* MATTER CARDS */
-.matter-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: box-shadow 0.15s, transform 0.1s;
-  box-shadow: var(--shadow);
-}
+.main { padding: 0 16px 16px; padding-bottom: calc(80px + env(safe-area-inset-bottom,0)); border-top: 1px solid var(--border); background: var(--white); border-radius: 0 var(--radius-lg) 0 0; }
+#main-content { padding-top: 14px; }
+
+.section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 10px; }
+
+.matter-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: box-shadow 0.15s, transform 0.1s; box-shadow: var(--shadow); }
 .matter-card:active { transform: scale(0.985); }
+.matter-card.archived { opacity: 0.72; }
 .matter-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .matter-client { font-size: 15px; font-weight: 600; }
 .matter-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
@@ -124,242 +121,79 @@ body {
 .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--navy-light), var(--navy)); border-radius: 2px; transition: width 0.4s; }
 
-/* BADGES */
-.badge {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 20px;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-}
+.badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.02em; }
 .badge.ok { background: var(--success-bg); color: var(--success); }
 .badge.partial { background: var(--warning-bg); color: var(--warning); }
 .badge.overdue { background: var(--danger-bg); color: var(--danger); }
 .badge.none { background: var(--beige); color: var(--text-muted); }
+.badge.archived { background: #ececec; color: #888; }
 
-/* NOTE HINT */
-.note-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--warning);
-  margin-top: 6px;
-}
+.note-hint { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--warning); margin-top: 6px; }
 
-/* FAB */
-.fab {
-  position: fixed;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0));
-  right: 20px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--navy);
-  color: var(--beige);
-  border: none;
-  cursor: pointer;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 18px rgba(26,42,74,0.35);
-  z-index: 40;
-  transition: transform 0.15s, background 0.15s;
-}
+.fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom,0)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: var(--beige); border: none; cursor: pointer; font-size: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(26,42,74,0.35); z-index: 40; transition: transform 0.15s, background 0.15s; }
 .fab:active { transform: scale(0.92); background: var(--navy-light); }
 
-/* MODAL */
-.modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(10,18,35,0.55);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-.modal {
-  background: var(--white);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  padding: 0;
-  max-height: 92dvh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.modal-handle {
-  width: 36px;
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  margin: 12px auto 0;
-}
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px 12px;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--white);
-  z-index: 2;
-}
+.modal-bg { position: fixed; inset: 0; background: rgba(10,18,35,0.55); z-index: 100; display: flex; flex-direction: column; justify-content: flex-end; }
+.modal { background: var(--white); border-radius: var(--radius-lg) var(--radius-lg) 0 0; max-height: 92dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 12px auto 0; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 12px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 2; }
 .modal-title { font-size: 16px; font-weight: 600; }
 .modal-body { padding: 16px 18px; }
-.modal-close {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: var(--beige);
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted);
-}
+.modal-close { width: 30px; height: 30px; border-radius: 50%; background: var(--beige); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
 
-/* FORM */
 .field { margin-bottom: 14px; }
 .field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
-.field input, .field textarea, .field select {
-  width: 100%;
-  font-size: 15px;
-  padding: 10px 12px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--white);
-  color: var(--text);
-  outline: none;
-  font-family: inherit;
-  transition: border-color 0.15s;
-}
+.field input, .field textarea { width: 100%; font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--white); color: var(--text); outline: none; font-family: inherit; transition: border-color 0.15s; }
 .field input:focus, .field textarea:focus { border-color: var(--navy); }
 .field textarea { resize: vertical; min-height: 70px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-/* RATE ROWS */
-.rate-section-title {
-  font-size: 12px; font-weight: 600; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.04em;
-  margin: 18px 0 10px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.rate-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 36px;
-  gap: 8px;
-  margin-bottom: 8px;
-  align-items: end;
-}
+.rate-section-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin: 18px 0 10px; display: flex; align-items: center; justify-content: space-between; }
+.rate-row { display: grid; grid-template-columns: 1fr 1fr 36px; gap: 8px; margin-bottom: 8px; align-items: end; }
 .rate-row input { font-size: 14px; padding: 9px 10px; }
-.del-btn {
-  width: 36px; height: 38px;
-  background: var(--danger-bg);
-  border: none;
-  border-radius: var(--radius);
-  color: var(--danger);
-  cursor: pointer;
-  font-size: 18px;
-  display: flex; align-items: center; justify-content: center;
-}
+.del-btn { width: 36px; height: 38px; background: var(--danger-bg); border: none; border-radius: var(--radius); color: var(--danger); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
 
-/* PAYMENTS */
-.payment-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  gap: 8px;
-}
+.payment-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 8px; }
 .payment-row:last-child { border-bottom: none; }
 .pay-date { font-size: 12px; color: var(--text-muted); }
 .pay-amount { font-size: 15px; font-weight: 600; color: var(--success); }
 
-/* RATE LIST */
-.rate-list-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
+.rate-list-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
 .rate-list-row:last-child { border-bottom: none; }
 
-/* BUTTONS */
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 10px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--white);
-  color: var(--text);
-  font-size: 14px; font-weight: 500;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.12s;
-}
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--white); color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: background 0.12s; }
 .btn:active { background: var(--beige); }
-.btn.primary {
-  background: var(--navy);
-  color: var(--beige);
-  border-color: var(--navy);
-}
+.btn.primary { background: var(--navy); color: var(--beige); border-color: var(--navy); }
 .btn.primary:active { background: var(--navy-light); }
 .btn.danger { color: var(--danger); border-color: #f5c0c0; }
 .btn.danger:active { background: var(--danger-bg); }
 .btn.full { width: 100%; justify-content: center; }
 .btn.small { padding: 6px 12px; font-size: 13px; }
+.btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.btn-row .btn { flex: 1; justify-content: center; min-width: 80px; }
 
-.btn-row { display: flex; gap: 8px; margin-top: 10px; }
-.btn-row .btn { flex: 1; justify-content: center; }
-
-/* DETAIL STATS */
 .detail-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
 .detail-stat { background: var(--beige); border-radius: var(--radius); padding: 10px; text-align: center; }
 .detail-stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
 .detail-stat-val { font-size: 15px; font-weight: 700; }
 
-/* ADD PAYMENT INLINE */
-.add-payment-row {
-  display: grid; grid-template-columns: 1fr 1fr 44px; gap: 8px;
-  margin-top: 12px; align-items: end;
-}
+.add-payment-row { display: grid; grid-template-columns: 1fr 1fr 44px; gap: 8px; margin-top: 12px; align-items: end; }
 .add-payment-row input { font-size: 14px; padding: 9px 10px; }
-.add-btn {
-  width: 44px; height: 38px;
-  background: var(--navy);
-  border: none;
-  border-radius: var(--radius);
-  color: var(--beige);
-  font-size: 20px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
+.add-btn { width: 44px; height: 38px; background: var(--navy); border: none; border-radius: var(--radius); color: var(--beige); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-/* NOTE BLOCK */
-.note-block {
-  background: var(--warning-bg);
-  border-left: 3px solid #e0b030;
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 10px 12px;
-  font-size: 13px;
-  color: var(--warning);
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
+.note-block { background: var(--warning-bg); border-left: 3px solid #e0b030; border-radius: 0 var(--radius) var(--radius) 0; padding: 10px 12px; font-size: 13px; color: var(--warning); margin-bottom: 14px; line-height: 1.5; }
 
-/* EMPTY */
-.empty {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--text-muted);
-}
+.empty { text-align: center; padding: 48px 24px; color: var(--text-muted); }
 .empty-icon { font-size: 48px; margin-bottom: 12px; }
 .empty h2 { font-size: 17px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
 .empty p { font-size: 14px; line-height: 1.6; }
 
-/* SECTION */
 .sub-section { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 16px 0 8px; }
+.hl { background: #fff3b0; border-radius: 2px; }
+
+.loading { text-align: center; padding: 48px 24px; color: var(--text-muted); font-size: 14px; }
+.spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -367,7 +201,7 @@ body {
 <nav class="topnav" role="banner">
   <div class="topnav-inner">
     <div class="topnav-logo">
-      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg viewBox="0 0 26 26" fill="none" aria-hidden="true">
         <line x1="13" y1="4" x2="13" y2="22" stroke="#f5ebd2" stroke-width="2" stroke-linecap="round"/>
         <line x1="4" y1="9" x2="22" y2="9" stroke="#f5ebd2" stroke-width="2" stroke-linecap="round"/>
         <circle cx="13" cy="5" r="2" fill="#f5ebd2"/>
@@ -379,22 +213,38 @@ body {
         <path d="M20 15 Q22 17.5 24 15" stroke="#f5ebd2" stroke-width="1.5" fill="none" stroke-linecap="round"/>
         <line x1="9" y1="22" x2="17" y2="22" stroke="#f5ebd2" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      <div>
-        <div class="topnav h1" style="font-size:17px;font-weight:600;color:#f5ebd2;letter-spacing:0.01em">Rozliczenia</div>
-        <div class="topnav-sub">Kancelaria prawna</div>
-      </div>
+      <span class="topnav-name">Rozliczenia</span>
     </div>
+    <div class="topnav-sub">Kancelaria prawna</div>
   </div>
-  <div class="stats-bar" id="stats-bar">
-    <div class="stat"><div class="stat-label">Spraw</div><div class="stat-val" id="st-count">0</div></div>
+  <div class="sync-bar">
+    <div class="sync-dot syncing" id="sync-dot"></div>
+    <span id="sync-label">Łączenie z bazą danych…</span>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-label">Spraw</div><div class="stat-val" id="st-count">—</div></div>
     <div class="stat"><div class="stat-label">Wartość</div><div class="stat-val" id="st-total">—</div></div>
     <div class="stat"><div class="stat-label">Wpłacono</div><div class="stat-val success" id="st-paid">—</div></div>
     <div class="stat"><div class="stat-label">Pozostało</div><div class="stat-val danger" id="st-rem">—</div></div>
   </div>
+  <div class="search-bar">
+    <div class="search-wrap">
+      <span style="color:var(--beige-text);font-size:15px">🔍</span>
+      <input type="search" id="search-input" placeholder="Szukaj po kliencie lub sprawie…" oninput="onSearch(this.value)" autocomplete="off">
+      <button class="search-clear" id="search-clear" onclick="clearSearch()" aria-label="Wyczyść">✕</button>
+    </div>
+  </div>
 </nav>
 
-<main class="main" id="main-content" role="main">
-  <div id="list-view"></div>
+<div class="tabs" id="tabs-bar">
+  <button class="tab active" id="tab-active" onclick="setTab('active')">Aktywne <span class="tab-count" id="cnt-active">0</span></button>
+  <button class="tab" id="tab-archived" onclick="setTab('archived')">Archiwum <span class="tab-count" id="cnt-archived">0</span></button>
+</div>
+
+<main class="main" role="main">
+  <div id="main-content">
+    <div class="loading"><div class="spinner"></div>Ładowanie danych…</div>
+  </div>
 </main>
 
 <button class="fab" onclick="openNew()" aria-label="Dodaj nową sprawę">+</button>
@@ -403,92 +253,145 @@ body {
   <div class="modal" id="modal-panel">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <span class="modal-title" id="modal-title">Nowa sprawa</span>
+      <span class="modal-title" id="modal-title"></span>
       <button class="modal-close" onclick="closeModal()" aria-label="Zamknij">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
 
-<script>
-const KEY = 'kancelaria_v2';
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxzE-49f5vK9lsITAL8qvj7Z54n26nmHc",
+  authDomain: "rozliczeniamm-4d039.firebaseapp.com",
+  projectId: "rozliczeniamm-4d039",
+  storageBucket: "rozliczeniamm-4d039.firebasestorage.app",
+  messagingSenderId: "353054838157",
+  appId: "1:353054838157:web:67bd087eea6e15a98581c4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const colRef = collection(db, 'sprawy');
+
 let data = [];
+let currentTab = 'active';
+let searchQuery = '';
 
-function load() {
-  try { const s = localStorage.getItem(KEY); if (s) data = JSON.parse(s); } catch(e) {}
+function setSyncStatus(state, text) {
+  const dot = document.getElementById('sync-dot');
+  const label = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + state;
+  label.textContent = text;
+}
+
+// Real-time listener — updates on ALL devices instantly
+onSnapshot(colRef, (snapshot) => {
+  data = snapshot.docs.map(d => ({ _id: d.id, ...d.data() }));
+  data.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+  setSyncStatus('ok', 'Zsynchronizowano');
   render();
-}
+}, (err) => {
+  setSyncStatus('err', 'Błąd połączenia — tryb offline');
+  console.error(err);
+});
 
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e) {}
-}
-
-function fmt(n) {
-  return Number(n).toLocaleString('pl-PL', {minimumFractionDigits: 0, maximumFractionDigits: 0}) + ' zł';
-}
-
-function fmtShort(n) {
-  const v = Number(n);
-  if (v >= 1000) return (v/1000).toLocaleString('pl-PL',{maximumFractionDigits:1}) + 'k';
-  return v.toLocaleString('pl-PL') + '';
-}
-
-function fmtDate(s) {
-  if (!s) return '—';
-  const d = new Date(s);
-  return d.toLocaleDateString('pl-PL', {day:'2-digit', month:'2-digit', year:'numeric'});
-}
-
-function paid(m) { return (m.payments||[]).reduce((a,p) => a + Number(p.amount), 0); }
-function remaining(m) { return Number(m.total) - paid(m); }
-
+function fmt(n) { return Number(n).toLocaleString('pl-PL',{minimumFractionDigits:0,maximumFractionDigits:0})+' zł'; }
+function fmtShort(n) { const v=Number(n); if(v>=1000) return (v/1000).toLocaleString('pl-PL',{maximumFractionDigits:1})+'k'; return v.toLocaleString('pl-PL'); }
+function fmtDate(s) { if(!s) return '—'; const d=new Date(s); return d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+function paid(m) { return (m.payments||[]).reduce((a,p)=>a+Number(p.amount),0); }
+function remaining(m) { return Number(m.total)-paid(m); }
 function nextDue(m) {
-  const p = paid(m);
-  let c = 0;
-  const rates = [...(m.rates||[])].sort((a,b) => a.date.localeCompare(b.date));
-  for (const r of rates) {
-    c += Number(r.amount);
-    if (c > p) return r.date;
-  }
+  const p=paid(m); let c=0;
+  const rates=[...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date));
+  for(const r of rates){ c+=Number(r.amount); if(c>p) return r.date; }
   return null;
 }
-
 function status(m) {
-  const rem = remaining(m);
-  if (rem <= 0) return 'ok';
-  const nd = nextDue(m);
-  if (nd && new Date(nd) < new Date()) return 'overdue';
-  if (paid(m) > 0) return 'partial';
+  if(m.archived) return 'archived';
+  const rem=remaining(m);
+  if(rem<=0) return 'ok';
+  const nd=nextDue(m);
+  if(nd && new Date(nd)<new Date()) return 'overdue';
+  if(paid(m)>0) return 'partial';
   return 'none';
 }
+const statusLabel={ok:'Zapłacono',partial:'Częściowo',overdue:'Zaległe',none:'Oczekuje',archived:'Archiwum'};
 
-const statusLabel = { ok:'Zapłacono', partial:'Częściowo', overdue:'Zaległe', none:'Oczekuje' };
+function highlight(text, query) {
+  if(!query) return esc(text);
+  const q = query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return esc(text).replace(new RegExp('('+q+')','gi'),'<mark class="hl">$1</mark>');
+}
+function matchesSearch(m,q) {
+  if(!q) return true;
+  const l=q.toLowerCase();
+  return (m.client||'').toLowerCase().includes(l)||(m.matter||'').toLowerCase().includes(l);
+}
+function esc(s) { const d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
+
+window.setTab = function(tab) {
+  currentTab=tab;
+  document.getElementById('tab-active').classList.toggle('active',tab==='active');
+  document.getElementById('tab-archived').classList.toggle('active',tab==='archived');
+  renderList();
+};
+window.onSearch = function(val) {
+  searchQuery=val.trim();
+  document.getElementById('search-clear').style.display=val?'block':'none';
+  renderList();
+};
+window.clearSearch = function() {
+  searchQuery='';
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').style.display='none';
+  renderList();
+};
 
 function render() {
-  let totalAll = 0, paidAll = 0;
-  for (const m of data) { totalAll += Number(m.total); paidAll += paid(m); }
-  document.getElementById('st-count').textContent = data.length;
-  document.getElementById('st-total').textContent = data.length ? fmtShort(totalAll)+' zł' : '—';
-  document.getElementById('st-paid').textContent = data.length ? fmtShort(paidAll)+' zł' : '—';
-  document.getElementById('st-rem').textContent = data.length ? fmtShort(totalAll-paidAll)+' zł' : '—';
+  const active=data.filter(m=>!m.archived);
+  const archived=data.filter(m=>m.archived);
+  let totalAll=0,paidAll=0;
+  for(const m of active){ totalAll+=Number(m.total); paidAll+=paid(m); }
+  document.getElementById('st-count').textContent=active.length;
+  document.getElementById('st-total').textContent=active.length?fmtShort(totalAll)+' zł':'—';
+  document.getElementById('st-paid').textContent=active.length?fmtShort(paidAll)+' zł':'—';
+  document.getElementById('st-rem').textContent=active.length?fmtShort(totalAll-paidAll)+' zł':'—';
+  document.getElementById('cnt-active').textContent=active.length;
+  document.getElementById('cnt-archived').textContent=archived.length;
+  renderList();
+}
 
-  const el = document.getElementById('list-view');
-  if (!data.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">⚖️</div><h2>Brak spraw</h2><p>Kliknij przycisk + aby dodać pierwszą sprawę i klienta.</p></div>`;
+function renderList() {
+  const el=document.getElementById('main-content');
+  const isArchived=currentTab==='archived';
+  const filtered=data
+    .map((m,i)=>({m,i}))
+    .filter(({m})=>!!m.archived===isArchived && matchesSearch(m,searchQuery));
+
+  if(!filtered.length) {
+    let msg=isArchived?'Brak zarchiwizowanych spraw.':'Brak aktywnych spraw.';
+    if(searchQuery) msg=`Brak wyników dla „${esc(searchQuery)}".`;
+    el.innerHTML=`<div class="empty"><div class="empty-icon">${isArchived?'📦':'⚖️'}</div><h2>${msg}</h2>${!searchQuery&&!isArchived?'<p>Kliknij przycisk + aby dodać pierwszą sprawę.</p>':''}</div>`;
     return;
   }
-  let html = `<div class="section-title">Aktywne sprawy</div>`;
-  for (let i = 0; i < data.length; i++) {
-    const m = data[i];
-    const p = paid(m), rem = remaining(m), s = status(m);
-    const pct = Math.min(100, Math.round((p / Number(m.total)) * 100));
-    const nd = nextDue(m);
-    const isOverdue = nd && new Date(nd) < new Date();
-    html += `<div class="matter-card" onclick="openDetail(${i})" role="button" tabindex="0">
+
+  let html='';
+  if(searchQuery) html+=`<div class="section-title" style="margin-bottom:10px">Wyniki dla „${esc(searchQuery)}" — ${filtered.length}</div>`;
+  for(const {m,i} of filtered) {
+    const p=paid(m),rem=remaining(m),s=status(m);
+    const pct=Math.min(100,Math.round((p/Number(m.total))*100));
+    const nd=nextDue(m);
+    const isOverdue=nd&&new Date(nd)<new Date();
+    html+=`<div class="matter-card${m.archived?' archived':''}" onclick="openDetail('${m._id}')" role="button" tabindex="0">
       <div class="matter-card-top">
         <div>
-          <div class="matter-client">${esc(m.client)}</div>
-          <div class="matter-desc">${esc(m.matter)}</div>
+          <div class="matter-client">${highlight(m.client,searchQuery)}</div>
+          <div class="matter-desc">${highlight(m.matter,searchQuery)}</div>
         </div>
         <span class="badge ${s}">${statusLabel[s]}</span>
       </div>
@@ -498,41 +401,31 @@ function render() {
         <div class="amount-item"><div class="amount-label">Pozostało</div><div class="amount-val ${rem>0?'danger':''}">${rem>0?fmt(rem):'—'}</div></div>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      ${nd ? `<div style="font-size:11px;margin-top:6px;color:${isOverdue?'var(--danger)':'var(--text-muted)'}">Kolejny termin: ${fmtDate(nd)}</div>` : ''}
-      ${m.note ? `<div class="note-hint">📝 Notatka</div>` : ''}
+      ${nd&&!m.archived?`<div style="font-size:11px;margin-top:6px;color:${isOverdue?'var(--danger)':'var(--text-muted)'}">Kolejny termin: ${fmtDate(nd)}</div>`:''}
+      ${m.note?`<div class="note-hint">📝 Notatka</div>`:''}
     </div>`;
   }
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
 
-function esc(s) { const d = document.createElement('div'); d.textContent = s||''; return d.innerHTML; }
-
-function openModal(title, bodyHtml) {
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-body').innerHTML = bodyHtml;
-  document.getElementById('modal-bg').style.display = 'flex';
+function openModal(title,bodyHtml) {
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=bodyHtml;
+  document.getElementById('modal-bg').style.display='flex';
 }
-
-function closeModal() {
-  document.getElementById('modal-bg').style.display = 'none';
-}
-
-document.getElementById('modal-bg').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal-bg')) closeModal();
-});
+window.closeModal = function() { document.getElementById('modal-bg').style.display='none'; };
+document.getElementById('modal-bg').addEventListener('click',e=>{ if(e.target.id==='modal-bg') window.closeModal(); });
 
 /* ---- FORM ---- */
-let _editIdx = -1;
-let _formRates = [];
+let _editId=null, _formRates=[];
 
-function openNew() {
-  _editIdx = -1;
-  _formRates = [{ date: '', amount: '' }];
-  renderForm({ client:'', matter:'', total:'', note:'' });
-}
+window.openNew = function() {
+  _editId=null; _formRates=[{date:'',amount:''}];
+  renderForm({client:'',matter:'',total:'',note:''});
+};
 
-function renderForm(m) {
-  let rateHtml = _formRates.map((r, i) => `
+window.renderForm = function(m) {
+  let rateHtml=_formRates.map((r,i)=>`
     <div class="rate-row">
       <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;display:block;margin-bottom:4px">Termin</label>
         <input type="date" value="${r.date}" onchange="_formRates[${i}].date=this.value">
@@ -543,7 +436,8 @@ function renderForm(m) {
       <button class="del-btn" onclick="_formRates.splice(${i},1);renderForm(collectForm())" aria-label="Usuń ratę">✕</button>
     </div>`).join('');
 
-  const body = `
+  const isEdit=_editId!==null;
+  const body=`
     <div class="row2">
       <div class="field"><label>Klient</label><input id="f-client" value="${esc(m.client)}" placeholder="Imię / firma"></div>
       <div class="field"><label>Kwota (zł)</label><input id="f-total" type="number" value="${m.total||''}" placeholder="0"></div>
@@ -553,144 +447,155 @@ function renderForm(m) {
       <span>Harmonogram rat / terminów</span>
       <button class="btn small" onclick="_formRates.push({date:'',amount:''});renderForm(collectForm())">+ Dodaj</button>
     </div>
-    <div id="rates-area">${rateHtml}</div>
+    <div>${rateHtml}</div>
     <div class="field" style="margin-top:14px"><label>Notatka</label><textarea id="f-note" placeholder="Uwagi, szczegóły, informacje...">${esc(m.note||'')}</textarea></div>
     <div class="btn-row" style="margin-top:18px">
-      ${_editIdx !== -1 ? `<button class="btn danger" onclick="deleteMatter()">Usuń</button>` : ''}
-      <button class="btn primary full" onclick="saveMatter()">Zapisz sprawę</button>
-    </div>
-    ${_editIdx !== -1 ? '' : ''}
-  `;
-  openModal(_editIdx === -1 ? 'Nowa sprawa' : 'Edytuj sprawę', body);
-}
+      ${isEdit?`<button class="btn danger" onclick="deleteMatter()">Usuń</button>`:''}
+      <button class="btn primary full" onclick="saveMatter()">Zapisz</button>
+    </div>`;
+  openModal(isEdit?'Edytuj sprawę':'Nowa sprawa',body);
+};
 
-function collectForm() {
+window.collectForm = function() {
   return {
-    client: (document.getElementById('f-client')||{}).value || '',
-    matter: (document.getElementById('f-matter')||{}).value || '',
-    total: (document.getElementById('f-total')||{}).value || '',
-    note: (document.getElementById('f-note')||{}).value || ''
+    client:(document.getElementById('f-client')||{}).value||'',
+    matter:(document.getElementById('f-matter')||{}).value||'',
+    total:(document.getElementById('f-total')||{}).value||'',
+    note:(document.getElementById('f-note')||{}).value||''
   };
-}
+};
 
-function saveMatter() {
-  const f = collectForm();
-  if (!f.client.trim() || !f.matter.trim() || !parseFloat(f.total)) {
-    alert('Uzupełnij klienta, sprawę i kwotę.'); return;
-  }
-  const obj = {
-    client: f.client.trim(),
-    matter: f.matter.trim(),
-    total: parseFloat(f.total),
-    note: f.note.trim(),
-    rates: _formRates.filter(r => r.date && r.amount),
-    payments: _editIdx === -1 ? [] : data[_editIdx].payments
+window.saveMatter = async function() {
+  const f=window.collectForm();
+  if(!f.client.trim()||!f.matter.trim()||!parseFloat(f.total)){alert('Uzupełnij klienta, sprawę i kwotę.');return;}
+  setSyncStatus('syncing','Zapisywanie…');
+  const id=_editId||('m_'+Date.now());
+  const existing=_editId?data.find(m=>m._id===_editId):null;
+  const obj={
+    client:f.client.trim(), matter:f.matter.trim(),
+    total:parseFloat(f.total), note:f.note.trim(),
+    rates:_formRates.filter(r=>r.date&&r.amount),
+    payments:existing?existing.payments:[],
+    archived:existing?existing.archived:false,
+    createdAt:existing?existing.createdAt:Date.now()
   };
-  if (_editIdx === -1) data.push(obj); else data[_editIdx] = obj;
-  save(); render(); closeModal();
-}
+  try {
+    await setDoc(doc(db,'sprawy',id),obj);
+    window.closeModal();
+  } catch(e) { setSyncStatus('err','Błąd zapisu'); alert('Błąd zapisu: '+e.message); }
+};
 
-function deleteMatter() {
-  if (!confirm('Usunąć tę sprawę? Tej operacji nie można cofnąć.')) return;
-  data.splice(_editIdx, 1);
-  save(); render(); closeModal();
-}
+window.deleteMatter = async function() {
+  if(!confirm('Usunąć tę sprawę?')) return;
+  setSyncStatus('syncing','Usuwanie…');
+  try { await deleteDoc(doc(db,'sprawy',_editId)); window.closeModal(); }
+  catch(e) { setSyncStatus('err','Błąd usunięcia'); }
+};
 
 /* ---- DETAIL ---- */
-function openDetail(idx) {
-  const m = data[idx];
-  const p = paid(m), rem = remaining(m), s = status(m);
-  const pct = Math.min(100, Math.round((p / Number(m.total)) * 100));
-  const rates = [...(m.rates||[])].sort((a,b) => a.date.localeCompare(b.date));
+window.openDetail = function(id) {
+  const m=data.find(m=>m._id===id);
+  if(!m) return;
+  const p=paid(m),rem=remaining(m),s=status(m);
+  const pct=Math.min(100,Math.round((p/Number(m.total))*100));
+  const rates=[...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date));
 
-  let rateHtml = '';
-  let cumul = 0;
-  for (const r of rates) {
-    cumul += Number(r.amount);
-    const isPaid = cumul <= p;
-    rateHtml += `<div class="rate-list-row">
-      <span>${fmtDate(r.date)}</span>
-      <span>${fmt(r.amount)}</span>
-      <span class="badge ${isPaid?'ok':'none'}">${isPaid?'Opłacona':'Oczekuje'}</span>
-    </div>`;
+  let rateHtml='',cumul=0;
+  for(const r of rates){
+    cumul+=Number(r.amount);
+    const isPaid=cumul<=p;
+    rateHtml+=`<div class="rate-list-row"><span>${fmtDate(r.date)}</span><span>${fmt(r.amount)}</span><span class="badge ${isPaid?'ok':'none'}">${isPaid?'Opłacona':'Oczekuje'}</span></div>`;
   }
 
-  let payHtml = '';
-  const pays = m.payments || [];
-  if (!pays.length) payHtml = '<div style="font-size:13px;color:var(--text-muted);padding:6px 0">Brak zarejestrowanych wpłat</div>';
-  for (let i = 0; i < pays.length; i++) {
-    payHtml += `<div class="payment-row">
+  let payHtml='';
+  const pays=m.payments||[];
+  if(!pays.length) payHtml='<div style="font-size:13px;color:var(--text-muted);padding:6px 0">Brak zarejestrowanych wpłat</div>';
+  for(let i=0;i<pays.length;i++){
+    payHtml+=`<div class="payment-row">
       <div><div class="pay-date">${fmtDate(pays[i].date)}</div></div>
       <span class="pay-amount">${fmt(pays[i].amount)}</span>
-      <button class="btn small danger" onclick="deletePayment(${idx},${i})">✕</button>
+      <button class="btn small danger" onclick="deletePayment('${id}',${i})">✕</button>
     </div>`;
   }
 
-  const today = new Date().toISOString().slice(0,10);
-
-  const body = `
+  const today=new Date().toISOString().slice(0,10);
+  const body=`
     <div class="detail-stats">
       <div class="detail-stat"><div class="detail-stat-label">Kwota</div><div class="detail-stat-val">${fmt(m.total)}</div></div>
       <div class="detail-stat"><div class="detail-stat-label">Wpłacono</div><div class="detail-stat-val" style="color:var(--success)">${fmt(p)}</div></div>
       <div class="detail-stat"><div class="detail-stat-label">Pozostało</div><div class="detail-stat-val" style="color:${rem>0?'var(--danger)':'var(--success)'}">${rem>0?fmt(rem):'—'}</div></div>
     </div>
     <div class="progress-bar" style="height:6px;margin-bottom:16px"><div class="progress-fill" style="width:${pct}%"></div></div>
-
-    ${m.note ? `<div class="note-block">📝 ${esc(m.note)}</div>` : ''}
-
-    ${rates.length ? `<div class="sub-section">Harmonogram rat</div><div>${rateHtml}</div>` : ''}
-
+    ${m.note?`<div class="note-block">📝 ${esc(m.note)}</div>`:''}
+    ${rates.length?`<div class="sub-section">Harmonogram rat</div><div>${rateHtml}</div>`:''}
     <div class="sub-section">Wpłaty</div>
     <div id="pays-list">${payHtml}</div>
-    <div class="add-payment-row">
+    ${!m.archived?`<div class="add-payment-row">
       <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px">Data</label>
         <input type="date" id="pay-date" value="${today}">
       </div>
       <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px">Kwota (zł)</label>
         <input type="number" id="pay-amount" placeholder="0">
       </div>
-      <button class="add-btn" onclick="addPayment(${idx})" aria-label="Dodaj wpłatę">✓</button>
-    </div>
-
+      <button class="add-btn" onclick="addPayment('${id}')" aria-label="Dodaj wpłatę">✓</button>
+    </div>`:''}
     <div class="btn-row" style="margin-top:20px">
-      <button class="btn" onclick="openEdit(${idx})">✏️ Edytuj</button>
+      <button class="btn" onclick="openEdit('${id}')">✏️ Edytuj</button>
+      <button class="btn" onclick="toggleArchive('${id}')">${m.archived?'📤 Przywróć':'📦 Archiwizuj'}</button>
       <button class="btn" onclick="closeModal()">Zamknij</button>
-    </div>
-  `;
+    </div>`;
+  openModal(m.client,body);
+};
 
-  openModal(`${m.client}`, body);
+window.toggleArchive = async function(id) {
+  const m=data.find(m=>m._id===id);
+  if(!m) return;
+  setSyncStatus('syncing','Zapisywanie…');
+  try {
+    await updateDoc(doc(db,'sprawy',id),{archived:!m.archived});
+    window.closeModal();
+    window.setTab(m.archived?'active':'archived');
+  } catch(e) { setSyncStatus('err','Błąd'); }
+};
+
+window.openEdit = function(id) {
+  const m=data.find(m=>m._id===id);
+  if(!m) return;
+  _editId=id;
+  _formRates=m.rates&&m.rates.length?[...m.rates]:[{date:'',amount:''}];
+  window.renderForm(m);
+};
+
+window.addPayment = async function(id) {
+  const date=document.getElementById('pay-date').value;
+  const amount=parseFloat(document.getElementById('pay-amount').value)||0;
+  if(!date||!amount){alert('Podaj datę i kwotę wpłaty.');return;}
+  const m=data.find(m=>m._id===id);
+  if(!m) return;
+  setSyncStatus('syncing','Zapisywanie…');
+  const payments=[...(m.payments||[]),{date,amount}];
+  try {
+    await updateDoc(doc(db,'sprawy',id),{payments});
+    window.openDetail(id);
+  } catch(e) { setSyncStatus('err','Błąd zapisu'); }
+};
+
+window.deletePayment = async function(id,pidx) {
+  if(!confirm('Usunąć tę wpłatę?')) return;
+  const m=data.find(m=>m._id===id);
+  if(!m) return;
+  setSyncStatus('syncing','Zapisywanie…');
+  const payments=[...(m.payments||[])];
+  payments.splice(pidx,1);
+  try {
+    await updateDoc(doc(db,'sprawy',id),{payments});
+    window.openDetail(id);
+  } catch(e) { setSyncStatus('err','Błąd zapisu'); }
+};
+
+if('serviceWorker' in navigator) {
+  window.addEventListener('load',()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
-
-function openEdit(idx) {
-  _editIdx = idx;
-  const m = data[idx];
-  _formRates = m.rates && m.rates.length ? [...m.rates] : [{ date:'', amount:'' }];
-  renderForm(m);
-}
-
-function addPayment(idx) {
-  const date = document.getElementById('pay-date').value;
-  const amount = parseFloat(document.getElementById('pay-amount').value) || 0;
-  if (!date || !amount) { alert('Podaj datę i kwotę wpłaty.'); return; }
-  if (!data[idx].payments) data[idx].payments = [];
-  data[idx].payments.push({ date, amount });
-  save(); render(); openDetail(idx);
-}
-
-function deletePayment(idx, pidx) {
-  if (!confirm('Usunąć tę wpłatę?')) return;
-  data[idx].payments.splice(pidx, 1);
-  save(); render(); openDetail(idx);
-}
-
-/* ---- PWA ---- */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
-}
-
-load();
 </script>
 </body>
 </html>
