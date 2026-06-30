@@ -493,9 +493,21 @@ window.closeModal = function() { document.getElementById('modal-bg').style.displ
 document.getElementById('modal-bg').addEventListener('click',e=>{ if(e.target.id==='modal-bg') window.closeModal(); });
 
 let _editId=null, _formRates=[];
+window._formRatesRef = _formRates;
+
+window.addRateRow = function() {
+  _formRates.push({date:'',amount:''});
+  window._formRatesRef = _formRates;
+  renderForm(window.collectForm());
+};
+window.removeRateRow = function(i) {
+  _formRates.splice(i,1);
+  window._formRatesRef = _formRates;
+  renderForm(window.collectForm());
+};
 
 window.openNew = function() {
-  _editId=null; _formRates=[{date:'',amount:''}];
+  _editId=null; _formRates=[{date:'',amount:''}]; window._formRatesRef=_formRates;
   renderForm({client:'',matter:'',total:'',note:'',category:'inne'});
 };
 
@@ -504,12 +516,12 @@ window.renderForm = function(m) {
   const rateHtml=_formRates.map((r,i)=>`
     <div class="rate-row">
       <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px">Termin</label>
-        <input type="date" value="${r.date}" onchange="_formRates[${i}].date=this.value">
+        <input type="date" value="${r.date}" onchange="window._formRatesRef[${i}].date=this.value">
       </div>
       <div><label style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px">Kwota (zł)</label>
-        <input type="number" placeholder="0" value="${r.amount}" onchange="_formRates[${i}].amount=this.value">
+        <input type="number" placeholder="0" value="${r.amount}" onchange="window._formRatesRef[${i}].amount=this.value">
       </div>
-      <button class="del-btn" onclick="_formRates.splice(${i},1);renderForm(collectForm())" aria-label="Usuń ratę">✕</button>
+      <button class="del-btn" onclick="removeRateRow(${i})" aria-label="Usuń ratę">✕</button>
     </div>`).join('');
 
   const isEdit=_editId!==null;
@@ -525,7 +537,7 @@ window.renderForm = function(m) {
     <div class="field"><label>Opis sprawy</label><input id="f-matter" value="${esc(m.matter)}" placeholder="Krótki opis"></div>
     <div class="rate-section-title">
       <span>Harmonogram rat / terminów</span>
-      <button class="btn small" onclick="_formRates.push({date:'',amount:''});renderForm(collectForm())">+ Dodaj</button>
+      <button class="btn small" onclick="addRateRow()">+ Dodaj</button>
     </div>
     <div>${rateHtml}</div>
     <div class="field" style="margin-top:14px"><label>Notatka</label><textarea id="f-note" placeholder="Uwagi, szczegóły, informacje...">${esc(m.note||'')}</textarea></div>
@@ -621,7 +633,7 @@ window.toggleArchive = async function(id) {
 
 window.openEdit = function(id) {
   const m=data.find(m=>m._id===id); if(!m) return;
-  _editId=id; _formRates=m.rates&&m.rates.length?[...m.rates]:[{date:'',amount:''}];
+  _editId=id; _formRates=m.rates&&m.rates.length?[...m.rates]:[{date:'',amount:''}]; window._formRatesRef=_formRates;
   window.renderForm(m);
 };
 
