@@ -97,6 +97,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ar
 .cat-inne { background: var(--beige); color: var(--text-muted); }
 
 .note-hint { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--warning); margin-top: 6px; }
+.quick-del { background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px; line-height: 1; opacity: 0.5; transition: opacity 0.12s; }
+.quick-del:active { opacity: 1; }
 
 .fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom,0)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: var(--beige); border: none; cursor: pointer; font-size: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(26,42,74,0.35); z-index: 40; transition: transform 0.15s, background 0.15s; }
 .fab:active { transform: scale(0.92); background: var(--navy-light); }
@@ -298,9 +300,8 @@ function fmtDate(s) { if(!s) return '—'; return new Date(s).toLocaleDateString
 function paid(m) { return (m.payments||[]).reduce((a,p)=>a+Number(p.amount),0); }
 function remaining(m) { return Number(m.total)-paid(m); }
 function nextDue(m) {
-  const p=paid(m); let c=0;
-  for(const r of [...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date))){ c+=Number(r.amount); if(c>p) return r.date; }
-  return null;
+  const unpaidRates=[...(m.rates||[])].filter(r=>!r.paid).sort((a,b)=>a.date.localeCompare(b.date));
+  return unpaidRates.length ? unpaidRates[0].date : null;
 }
 function status(m) {
   if(m.archived) return 'archived';
@@ -379,7 +380,10 @@ function renderList() {
           <div class="matter-desc">${highlight(m.matter,searchQuery)}</div>
           <span class="cat-badge cat-${cat}">${CAT_LABELS[cat]||cat}</span>
         </div>
-        <span class="badge ${s}">${statusLabel[s]}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="badge ${s}">${statusLabel[s]}</span>
+          <button class="quick-del" onclick="event.stopPropagation();quickDelete('${m._id}','${esc(m.client)}')" aria-label="Usuń sprawę">🗑</button>
+        </div>
       </div>
       <div class="matter-amounts">
         <div class="amount-item"><div class="amount-label">Kwota</div><div class="amount-val">${fmt(m.total)}</div></div>
@@ -590,6 +594,13 @@ window.deleteMatter = async function() {
   catch(e) { setSyncStatus('err','Błąd usunięcia'); }
 };
 
+window.quickDelete = async function(id, clientName) {
+  if(!confirm(`Usunąć sprawę klienta „${clientName}"? Tej operacji nie można cofnąć.`)) return;
+  setSyncStatus('syncing','Usuwanie…');
+  try { await deleteDoc(doc(db,'sprawy',id)); }
+  catch(e) { setSyncStatus('err','Błąd usunięcia'); }
+};
+
 window.openDetail = function(id) {
   const m=data.find(m=>m._id===id); if(!m) return;
   const p=paid(m),rem=remaining(m),s=status(m);
@@ -597,8 +608,15 @@ window.openDetail = function(id) {
   const rates=[...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date));
   const cat=m.category||'inne';
 
-  let rateHtml='',cumul=0;
-  for(const r of rates){ cumul+=Number(r.amount); const ip=cumul<=p; rateHtml+=`<div class="rate-list-row"><span>${fmtDate(r.date)}</span><span>${fmt(r.amount)}</span><span class="badge ${ip?'ok':'none'}">${ip?'Opłacona':'Oczekuje'}</span></div>`; }
+  const ratesWithIdx=(m.rates||[]).map((r,idx)=>({...r,idx})).sort((a,b)=>a.date.localeCompare(b.date));
+  let rateHtml='';
+  for(const r of ratesWithIdx){
+    rateHtml+=`<div class="rate-list-row" style="cursor:pointer" onclick="toggleRatePaid('${id}',${r.idx})">
+      <span>${fmtDate(r.date)}</span>
+      <span>${fmt(r.amount)}</span>
+      <span class="badge ${r.paid?'ok':'none'}">${r.paid?'✓ Opłacona':'Oznacz jako opłaconą'}</span>
+    </div>`;
+  }
 
   let payHtml='';
   const pays=m.payments||[];
@@ -647,6 +665,26 @@ window.openEdit = function(id) {
   window.renderForm(m);
 };
 
+window.toggleRatePaid = async function(id, rateIdx) {
+  const m=data.find(m=>m._id===id); if(!m) return;
+  const rates=[...(m.rates||[])];
+  const r=rates[rateIdx]; if(!r) return;
+  const willBePaid=!r.paid;
+  rates[rateIdx]={...r, paid:willBePaid};
+
+  let payments=[...(m.payments||[])];
+  if(willBePaid){
+    payments.push({date:r.date, amount:r.amount, rateIdx});
+  } else {
+    const pi=payments.findIndex(p=>p.rateIdx===rateIdx);
+    if(pi!==-1) payments.splice(pi,1);
+  }
+
+  setSyncStatus('syncing','Zapisywanie…');
+  try { await updateDoc(doc(db,'sprawy',id),{rates,payments}); window.openDetail(id); }
+  catch(e) { setSyncStatus('err','Błąd zapisu'); }
+};
+
 window.addPayment = async function(id) {
   const date=document.getElementById('pay-date').value;
   const amount=parseFloat(document.getElementById('pay-amount').value)||0;
@@ -661,8 +699,15 @@ window.deletePayment = async function(id,pidx) {
   if(!confirm('Usunąć tę wpłatę?')) return;
   const m=data.find(m=>m._id===id); if(!m) return;
   setSyncStatus('syncing','Zapisywanie…');
-  const payments=[...(m.payments||[])]; payments.splice(pidx,1);
-  try { await updateDoc(doc(db,'sprawy',id),{payments}); window.openDetail(id); }
+  const payments=[...(m.payments||[])];
+  const removed=payments[pidx];
+  payments.splice(pidx,1);
+  let rates=m.rates;
+  if(removed && removed.rateIdx!==undefined && rates && rates[removed.rateIdx]){
+    rates=[...rates];
+    rates[removed.rateIdx]={...rates[removed.rateIdx], paid:false};
+  }
+  try { await updateDoc(doc(db,'sprawy',id),{payments, ...(rates!==m.rates?{rates}:{})}); window.openDetail(id); }
   catch(e) { setSyncStatus('err','Błąd zapisu'); }
 };
 
