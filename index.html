@@ -531,8 +531,13 @@ window.renderForm = function(m) {
       <div class="field"><label>Kwota (zł)</label><input id="f-total" type="number" value="${m.total||''}" placeholder="0"></div>
     </div>
     <div class="row2">
+      <div class="field"><label>Success fee</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input id="f-successfee" type="number" value="${m.successFee||''}" placeholder="0" style="flex:1">
+          <span style="font-size:15px;font-weight:600;color:var(--text-muted)">%</span>
+        </div>
+      </div>
       <div class="field"><label>Kategoria</label><select id="f-cat">${catOptions}</select></div>
-      <div class="field" style="align-self:end"></div>
     </div>
     <div class="field"><label>Opis sprawy</label><input id="f-matter" value="${esc(m.matter)}" placeholder="Krótki opis"></div>
     <div class="rate-section-title">
@@ -553,6 +558,7 @@ window.collectForm = function() {
     client:(document.getElementById('f-client')||{}).value||'',
     matter:(document.getElementById('f-matter')||{}).value||'',
     total:(document.getElementById('f-total')||{}).value||'',
+    successFee:(document.getElementById('f-successfee')||{}).value||'',
     note:(document.getElementById('f-note')||{}).value||'',
     category:(document.getElementById('f-cat')||{}).value||'inne'
   };
@@ -566,6 +572,7 @@ window.saveMatter = async function() {
   const existing=_editId?data.find(m=>m._id===_editId):null;
   const obj={
     client:f.client.trim(), matter:f.matter.trim(), total:parseFloat(f.total),
+    successFee:f.successFee?parseFloat(f.successFee):null,
     note:f.note.trim(), category:f.category,
     rates:_formRates.filter(r=>r.date&&r.amount),
     payments:existing?existing.payments:[],
@@ -600,7 +607,10 @@ window.openDetail = function(id) {
 
   const today=new Date().toISOString().slice(0,10);
   const body=`
-    <div style="margin-bottom:10px"><span class="cat-badge cat-${cat}">${CAT_LABELS[cat]||cat}</span></div>
+    <div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="cat-badge cat-${cat}">${CAT_LABELS[cat]||cat}</span>
+      ${m.successFee?`<span class="cat-badge" style="background:var(--success-bg);color:var(--success)">Success fee: ${m.successFee}%</span>`:''}
+    </div>
     <div class="detail-stats">
       <div class="detail-stat"><div class="detail-stat-label">Kwota</div><div class="detail-stat-val">${fmt(m.total)}</div></div>
       <div class="detail-stat"><div class="detail-stat-label">Wpłacono</div><div class="detail-stat-val" style="color:var(--success)">${fmt(p)}</div></div>
