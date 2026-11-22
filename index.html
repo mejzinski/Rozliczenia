@@ -188,6 +188,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ar
 .report-pay-client { font-weight: 600; }
 .report-pay-matter { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
 .report-pay-amount { font-weight: 600; color: var(--success); white-space: nowrap; }
+
+/* LOGOWANIE */
+.login-bg { position: fixed; inset: 0; z-index: 300; background: var(--navy); display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.login-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px 24px; width: 100%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+.login-title { font-size: 22px; font-weight: 700; color: var(--navy); }
+.login-sub { font-size: 13px; color: var(--text-muted); margin: 4px 0 20px; }
+.login-card .field input { font-size: 16px; }
+.login-err { color: var(--danger); font-size: 13px; min-height: 18px; margin: 4px 0 10px; }
+.login-link { display: block; margin: 14px auto 0; background: none; border: none; color: var(--text-muted); font-size: 12.5px; text-decoration: underline; cursor: pointer; font-family: inherit; }
+.logout-btn { background: none; border: 1px solid rgba(255,255,255,0.25); color: var(--beige-text); font-size: 11px; padding: 2px 10px; border-radius: 12px; cursor: pointer; margin-left: 10px; font-family: inherit; }
 </style>
 </head>
 <body>
@@ -214,6 +224,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ar
   <div class="sync-bar">
     <div class="sync-dot syncing" id="sync-dot"></div>
     <span id="sync-label">Łączenie z bazą danych…</span>
+    <button class="logout-btn" onclick="doLogout()">Wyloguj</button>
   </div>
   <div class="stats-bar">
     <div class="stat"><div class="stat-label">Spraw</div><div class="stat-val" id="st-count">—</div></div>
@@ -242,6 +253,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ar
   </div>
 </main>
 
+<div id="login-bg" class="login-bg" style="display:none">
+  <form class="login-card" onsubmit="doLogin(event)">
+    <div class="login-title">Rozliczenia</div>
+    <div class="login-sub">Zaloguj się, aby zobaczyć sprawy</div>
+    <div class="field"><label>E-mail</label><input id="lg-email" type="email" autocomplete="username" required></div>
+    <div class="field"><label>Hasło</label><input id="lg-pass" type="password" autocomplete="current-password" required></div>
+    <div class="login-err" id="lg-err"></div>
+    <button class="btn primary full" type="submit" id="lg-btn">Zaloguj</button>
+    <button type="button" class="login-link" onclick="resetPass()">Nie pamiętam hasła</button>
+  </form>
+</div>
+
 <button class="fab" id="fab" onclick="openNew()" aria-label="Dodaj nową sprawę">+</button>
 
 <div id="modal-bg" class="modal-bg" style="display:none" role="dialog" aria-modal="true">
@@ -258,6 +281,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ar
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxzE-49f5vK9lsITAL8qvj7Z54n26nmHc",
@@ -270,9 +294,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 const colRef = collection(db, 'sprawy');
 
 const CATEGORIES = ['gospodarcze','rodzinne','karne','cywilne','pracownicze','administracyjne','inne'];
+// zgodność z aplikacją „Zadania i Czynności” (wspólna kolekcja „sprawy”)
+const CAT_TO_RODZAJ = { gospodarcze:'gospodarcza', rodzinne:'rodzinna', karne:'karna', cywilne:'cywilna', pracownicze:'pracownicza', administracyjne:'administracyjna', inne:'inna' };
+const RODZAJ_TO_CAT = Object.fromEntries(Object.entries(CAT_TO_RODZAJ).map(([k,v]) => [v,k]));
 const CAT_LABELS = { gospodarcze:'Gospodarcze', rodzinne:'Rodzinne', karne:'Karne', cywilne:'Cywilne', pracownicze:'Pracownicze', administracyjne:'Administracyjne', inne:'Inne' };
 
 let data = [];
@@ -287,12 +315,66 @@ function setSyncStatus(state, text) {
   document.getElementById('sync-label').textContent = text;
 }
 
-onSnapshot(colRef, (snapshot) => {
-  data = snapshot.docs.map(d => ({ _id: d.id, ...d.data() }));
-  data.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-  setSyncStatus('ok', 'Zsynchronizowano');
-  render();
-}, () => setSyncStatus('err', 'Błąd połączenia'));
+let unsubSync = null;
+function startSync() {
+  stopSync();
+  setSyncStatus('syncing', 'Łączenie z bazą danych…');
+  unsubSync = onSnapshot(colRef, (snapshot) => {
+    data = snapshot.docs.map(d => {
+      const v = d.data();
+      return { _id: d.id, ...v,
+        client: v.client || v.klient || '', matter: v.matter || v.nazwa || '',
+        category: v.category || RODZAJ_TO_CAT[v.rodzaj] || 'inne',
+        note: v.note != null ? v.note : (v.notatka || ''),
+        archived: v.archived !== undefined ? !!v.archived : v.status === 'archiwum',
+        total: Number(v.total) || 0, createdAt: v.createdAt || v.utworzono || 0 };
+    });
+    data.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+    setSyncStatus('ok', 'Zsynchronizowano');
+    render();
+  }, () => setSyncStatus('err', 'Błąd połączenia'));
+}
+function stopSync() { if (unsubSync) { unsubSync(); unsubSync = null; } }
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById('login-bg').style.display = 'none';
+    startSync();
+  } else {
+    stopSync();
+    data = [];
+    render();
+    window.closeModal();
+    document.getElementById('login-bg').style.display = 'flex';
+    setSyncStatus('syncing', 'Zaloguj się');
+  }
+});
+
+const AUTH_ERRORS = {
+  'auth/invalid-credential': 'Nieprawidłowy e-mail lub hasło.',
+  'auth/wrong-password': 'Nieprawidłowy e-mail lub hasło.',
+  'auth/user-not-found': 'Nieprawidłowy e-mail lub hasło.',
+  'auth/invalid-email': 'Nieprawidłowy adres e-mail.',
+  'auth/too-many-requests': 'Zbyt wiele prób. Spróbuj za kilka minut.',
+  'auth/network-request-failed': 'Brak połączenia z internetem.'
+};
+window.doLogin = async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('lg-btn'), err = document.getElementById('lg-err');
+  err.textContent = ''; err.style.color = ''; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, document.getElementById('lg-email').value.trim(), document.getElementById('lg-pass').value);
+    document.getElementById('lg-pass').value = '';
+  } catch (ex) { err.textContent = AUTH_ERRORS[ex.code] || ('Błąd logowania: ' + (ex.code || ex.message)); }
+  btn.disabled = false;
+};
+window.resetPass = async function() {
+  const email = document.getElementById('lg-email').value.trim(), err = document.getElementById('lg-err');
+  if (!email) { err.style.color = ''; err.textContent = 'Wpisz najpierw e-mail, a potem kliknij „Nie pamiętam hasła”.'; return; }
+  try { await sendPasswordResetEmail(auth, email); err.style.color = 'var(--success)'; err.textContent = 'Wysłano wiadomość z linkiem do zmiany hasła.'; }
+  catch (ex) { err.style.color = ''; err.textContent = AUTH_ERRORS[ex.code] || 'Nie udało się wysłać wiadomości.'; }
+};
+window.doLogout = async function() { if (confirm('Wylogować z aplikacji?')) await signOut(auth); };
 
 function fmt(n) { return Number(n).toLocaleString('pl-PL',{minimumFractionDigits:0,maximumFractionDigits:0})+' zł'; }
 function fmtShort(n) { const v=Number(n); if(v>=1000) return (v/1000).toLocaleString('pl-PL',{maximumFractionDigits:1})+'k'; return v.toLocaleString('pl-PL'); }
@@ -305,6 +387,7 @@ function nextDue(m) {
 }
 function status(m) {
   if(m.archived) return 'archived';
+  if(!(Number(m.total)>0) && paid(m)===0) return 'none'; // sprawa bez ustalonego wynagrodzenia
   const rem=remaining(m); if(rem<=0) return 'ok';
   const nd=nextDue(m); if(nd&&new Date(nd)<new Date()) return 'overdue';
   if(paid(m)>0) return 'partial';
@@ -370,7 +453,7 @@ function renderList() {
   if(searchQuery) html+=`<div class="section-title" style="margin-bottom:10px">Wyniki — ${filtered.length}</div>`;
   for(const {m,i} of filtered){
     const p=paid(m),rem=remaining(m),s=status(m);
-    const pct=Math.min(100,Math.round((p/Number(m.total))*100));
+    const pct=Number(m.total)>0?Math.min(100,Math.round((p/Number(m.total))*100)):0;
     const nd=nextDue(m); const isOverdue=nd&&new Date(nd)<new Date();
     const cat=m.category||'inne';
     html+=`<div class="matter-card${m.archived?' archived':''}" onclick="openDetail('${m._id}')" role="button" tabindex="0">
@@ -578,12 +661,13 @@ window.saveMatter = async function() {
     client:f.client.trim(), matter:f.matter.trim(), total:parseFloat(f.total),
     successFee:f.successFee?parseFloat(f.successFee):null,
     note:f.note.trim(), category:f.category,
+    klient:f.client.trim(), nazwa:f.matter.trim(), rodzaj:CAT_TO_RODZAJ[f.category]||'inna', notatka:f.note.trim(),
     rates:_formRates.filter(r=>r.date&&r.amount),
     payments:existing?existing.payments:[],
     archived:existing?existing.archived:false,
     createdAt:existing?existing.createdAt:Date.now()
   };
-  try { await setDoc(doc(db,'sprawy',id),obj); window.closeModal(); }
+  try { await setDoc(doc(db,'sprawy',id),obj,{merge:true}); window.closeModal(); }
   catch(e) { setSyncStatus('err','Błąd zapisu'); alert('Błąd: '+e.message); }
 };
 
@@ -604,7 +688,7 @@ window.quickDelete = async function(id, clientName) {
 window.openDetail = function(id) {
   const m=data.find(m=>m._id===id); if(!m) return;
   const p=paid(m),rem=remaining(m),s=status(m);
-  const pct=Math.min(100,Math.round((p/Number(m.total))*100));
+  const pct=Number(m.total)>0?Math.min(100,Math.round((p/Number(m.total))*100)):0;
   const rates=[...(m.rates||[])].sort((a,b)=>a.date.localeCompare(b.date));
   const cat=m.category||'inne';
 
