@@ -663,9 +663,9 @@ window.saveMatter = async function() {
     note:f.note.trim(), category:f.category,
     klient:f.client.trim(), nazwa:f.matter.trim(), rodzaj:CAT_TO_RODZAJ[f.category]||'inna', notatka:f.note.trim(),
     rates:_formRates.filter(r=>r.date&&r.amount),
-    payments:existing?existing.payments:[],
-    archived:existing?existing.archived:false,
-    createdAt:existing?existing.createdAt:Date.now()
+    payments:existing?(existing.payments||[]):[],
+    archived:existing?!!existing.archived:false,
+    createdAt:existing?(existing.createdAt||Date.now()):Date.now()
   };
   try { await setDoc(doc(db,'sprawy',id),obj,{merge:true}); window.closeModal(); }
   catch(e) { setSyncStatus('err','Błąd zapisu'); alert('Błąd: '+e.message); }
