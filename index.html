@@ -94,6 +94,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ar
 .cat-cywilne { background: #eaf6ef; color: #2d7a4f; }
 .cat-pracownicze { background: #fdf3dc; color: #8a6200; }
 .cat-administracyjne { background: #ede8fe; color: #5b3fa6; }
+.cat-ubezpieczeniowe { background: #e0f4f7; color: #1b6f7d; }
 .cat-inne { background: var(--beige); color: var(--text-muted); }
 
 .note-hint { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--warning); margin-top: 6px; }
@@ -297,11 +298,11 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const colRef = collection(db, 'sprawy');
 
-const CATEGORIES = ['gospodarcze','rodzinne','karne','cywilne','pracownicze','administracyjne','inne'];
+const CATEGORIES = ['gospodarcze','rodzinne','karne','cywilne','pracownicze','administracyjne','ubezpieczeniowe','inne'];
 // zgodność z aplikacją „Zadania i Czynności” (wspólna kolekcja „sprawy”)
-const CAT_TO_RODZAJ = { gospodarcze:'gospodarcza', rodzinne:'rodzinna', karne:'karna', cywilne:'cywilna', pracownicze:'pracownicza', administracyjne:'administracyjna', inne:'inna' };
+const CAT_TO_RODZAJ = { gospodarcze:'gospodarcza', rodzinne:'rodzinna', karne:'karna', cywilne:'cywilna', pracownicze:'pracownicza', administracyjne:'administracyjna', ubezpieczeniowe:'ubezpieczeniowa', inne:'inna' };
 const RODZAJ_TO_CAT = Object.fromEntries(Object.entries(CAT_TO_RODZAJ).map(([k,v]) => [v,k]));
-const CAT_LABELS = { gospodarcze:'Gospodarcze', rodzinne:'Rodzinne', karne:'Karne', cywilne:'Cywilne', pracownicze:'Pracownicze', administracyjne:'Administracyjne', inne:'Inne' };
+const CAT_LABELS = { gospodarcze:'Gospodarcze', rodzinne:'Rodzinne', karne:'Karne', cywilne:'Cywilne', pracownicze:'Pracownicze', administracyjne:'Administracyjne', ubezpieczeniowe:'Ubezpieczeniowe', inne:'Inne' };
 
 let data = [];
 let currentTab = 'active';
